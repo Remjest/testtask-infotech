@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import { message } from 'antd';
-import { login } from '../model/api';
+import { login } from '../../../pages/LoginPage/model/api';
 import { setToken } from '@/shared';
 import { useNavigate } from 'react-router-dom';
 

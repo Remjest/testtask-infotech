@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Input } from 'antd';
 import { Button } from 'antd';
 import StyledLoginForm from './StyledLoginForm';
-import { useLogin } from '../lib/useLogin';
+import { useLogin } from '@/features/auth';
 
 export const LoginForm = () => {
     const [username, setUsername] = useState('');
