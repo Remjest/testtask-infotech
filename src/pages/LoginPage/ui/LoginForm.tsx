@@ -7,31 +7,18 @@ import { Input } from 'antd';
 import { Button } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import StyledLoginForm from './StyledLoginForm';
+import { useLogin } from '../lib/useLogin';
 
 export const LoginForm = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
-    const navigate = useNavigate();
 
-    const loginMutation = useMutation({
-        mutationFn: () => login(username, password),
-        onSuccess: (token) => {
-            setToken(token);
-            message.success('Успешный вход!');
-            navigate('/users', { replace: true });
-        },
-        onError: (error: Error) => {
-            message.error(error.message);
-        },
-        onSettled: () => setIsLoading(false),
-    });
+    const loginMutation = useLogin();
 
     const handleSubmit = (e: React.FormEvent) => {
-        if (isLoading) return;
         e.preventDefault();
-        setIsLoading(true);
-        loginMutation.mutate();
+        if (loginMutation.isPending) return;
+        loginMutation.mutate({ username, password });
     };
 
     return (
@@ -42,7 +29,7 @@ export const LoginForm = () => {
                 placeholder="Логин"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                disabled={isLoading}
+                disabled={loginMutation.isPending}
             />
             <Input.Password
                 name='password'
@@ -50,14 +37,15 @@ export const LoginForm = () => {
                 placeholder="Пароль"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                disabled={isLoading}
+                disabled={loginMutation.isPending}
             />
 
             <Button
                 type="primary"
                 htmlType="submit"
-                loading={isLoading}
+                loading={loginMutation.isPending}
                 iconPosition='end'
+                disabled={loginMutation.isPending}
             >
             Войти
             </Button>
