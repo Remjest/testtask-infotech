@@ -8,9 +8,10 @@ interface EditUserProps {
     user: User;
     onSuccess: () => void;
     onCancel: () => void;
+    onLoadingChange: (loading: boolean) => void;
 }
 
-export const EditUser = ({ user, onSuccess, onCancel }: EditUserProps) => {
+export const EditUser = ({ user, onSuccess, onCancel, onLoadingChange }: EditUserProps) => {
     const [form] = Form.useForm();
     const editUserMutation = useEditUser();
     const deleteUserMutation = useDeleteUser();
@@ -19,6 +20,11 @@ export const EditUser = ({ user, onSuccess, onCancel }: EditUserProps) => {
         form.setFieldsValue(user);
     }, [user, form]);
 
+    useEffect(() => {
+        const isLoading = editUserMutation.isPending || deleteUserMutation.isPending;
+        onLoadingChange(isLoading);
+    }, [editUserMutation.isPending, deleteUserMutation.isPending, onLoadingChange]);
+    
     const onFinish = (values: Partial<User>) => {
         editUserMutation.mutate(
         { id: user.id, ...values },
@@ -65,7 +71,7 @@ export const EditUser = ({ user, onSuccess, onCancel }: EditUserProps) => {
                 rules={[{ required: true, message: 'Введите имя' }]}
                 required={false}
             >
-                <Input />
+                <Input disabled={editUserMutation.isPending || deleteUserMutation.isPending}/>
             </Form.Item>
 
             <Form.Item
@@ -78,11 +84,16 @@ export const EditUser = ({ user, onSuccess, onCancel }: EditUserProps) => {
                 ]}
                 required={false}
             >
-                <Input />
+                <Input disabled={editUserMutation.isPending || deleteUserMutation.isPending}/>
             </Form.Item>
 
             <div style={{ display: 'flex', gap: 10, marginTop: 24 }}>
-                <Button type="primary" onClick={handleDelete}>
+                <Button
+                    type="primary"
+                    onClick={handleDelete}
+                    loading={deleteUserMutation.isPending}
+                    disabled={editUserMutation.isPending || deleteUserMutation.isPending}
+                >
                 Удалить
                 </Button>
                 <Button
@@ -90,10 +101,15 @@ export const EditUser = ({ user, onSuccess, onCancel }: EditUserProps) => {
                     type="primary"
                     htmlType="submit"
                     loading={editUserMutation.isPending}
+                    disabled={editUserMutation.isPending || deleteUserMutation.isPending}
                 >
                 Сохранить
                 </Button>
-                <Button type="primary" onClick={onCancel}>Отмена</Button>
+                <Button
+                    type="primary"
+                    onClick={onCancel}
+                    disabled={editUserMutation.isPending || deleteUserMutation.isPending}
+                >Отмена</Button>
             </div>
         </Form>
     );

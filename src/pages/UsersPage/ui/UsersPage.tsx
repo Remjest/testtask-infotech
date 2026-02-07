@@ -11,6 +11,9 @@ export const UsersPage = () => {
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
     const [editingUser, setEditingUser] = useState<User | null>(null);
 
+    const [isEditModalLoading, setIsEditModalLoading] = useState(false);
+    const [isCreateModalLoading, setIsCreateModalLoading] = useState(false);
+
     return (
         <UserPageWrapper>
             <UsersList  onEditUser={setEditingUser}/>
@@ -20,12 +23,17 @@ export const UsersPage = () => {
             <Modal
                 title="Создание пользователя"
                 open={isCreateModalOpen}
-                onCancel={() => setIsCreateModalOpen(false)}
+                onCancel={() => {
+                    if (!isCreateModalLoading) setIsCreateModalOpen(false);
+                }}
                 footer={null}
+                closable={!isCreateModalLoading}
+                maskClosable={!isCreateModalLoading}
             >
                 <CreateUser
                     onSuccess={() => setIsCreateModalOpen(false)}
-                    onCancel={() => setIsCreateModalOpen(false)}
+                    onCancel={() => { if (!isCreateModalLoading) setIsCreateModalOpen(false) }}
+                    onLoadingChange={setIsCreateModalLoading}
                 />
             </Modal>
 
@@ -33,13 +41,24 @@ export const UsersPage = () => {
                 <Modal
                     title="Редактирование пользователя"
                     open={!!editingUser}
-                    onCancel={() => setEditingUser(null)}
+                    onCancel={() => {
+                        if (!isEditModalLoading) {
+                            setEditingUser(null);
+                        }
+                    }}
+                    closable={!isEditModalLoading}
+                    maskClosable={!isEditModalLoading}
                     footer={null}
                 >
                     <EditUser
                         user={editingUser}
                         onSuccess={() => setEditingUser(null)}
-                        onCancel={() => setEditingUser(null)}
+                        onCancel={() => {
+                            if (!isEditModalLoading) {
+                                setEditingUser(null);
+                            }
+                        }}
+                        onLoadingChange={setIsEditModalLoading}
                     />
                 </Modal>
             )}

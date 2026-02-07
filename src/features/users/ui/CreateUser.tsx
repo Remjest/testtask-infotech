@@ -1,15 +1,21 @@
 import { Form, Input, Button, message } from 'antd';
 import { useCreateUser } from '../lib/useCreateUser';
+import { useEffect } from 'react';
 
 interface CreateUserProps {
     onSuccess: () => void;
     onCancel: () => void;
+    onLoadingChange: (loading: boolean) => void;
 }
 
-export const CreateUser = ({ onSuccess, onCancel }: CreateUserProps) => {
+export const CreateUser = ({ onSuccess, onCancel, onLoadingChange }: CreateUserProps) => {
     const [form] = Form.useForm();
     const createUserMutation = useCreateUser();
 
+    useEffect(() => {
+        onLoadingChange(createUserMutation.isPending);
+    }, [createUserMutation.isPending, onLoadingChange]);
+    
     const onFinish = (values: { name: string; avatar: string }) => {
         createUserMutation.mutate(
             { ...values },
@@ -31,7 +37,7 @@ export const CreateUser = ({ onSuccess, onCancel }: CreateUserProps) => {
                 rules={[{ required: true, message: 'Введите имя' }]}
                 required={false}
             >
-            <Input />
+            <Input disabled={createUserMutation.isPending}/>
             </Form.Item>
 
             <Form.Item
@@ -44,7 +50,7 @@ export const CreateUser = ({ onSuccess, onCancel }: CreateUserProps) => {
                 ]}
                 required={false}
             >
-                <Input />
+                <Input disabled={createUserMutation.isPending}/>
             </Form.Item>
 
             <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end', marginTop: 24 }}>
@@ -52,10 +58,15 @@ export const CreateUser = ({ onSuccess, onCancel }: CreateUserProps) => {
                     type="primary"
                     htmlType="submit"
                     loading={createUserMutation.isPending}
+                    disabled={createUserMutation.isPending}
                 >
                 Создать
                 </Button>
-                <Button type="primary" onClick={onCancel}>Отмена</Button>
+                <Button
+                    type="primary"
+                    onClick={onCancel}
+                    disabled={createUserMutation.isPending}
+                >Отмена</Button>
             </div>
         </Form>
     );
