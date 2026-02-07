@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import { message } from 'antd';
 import { login } from '../model/api';
-import { setToken } from '../model/auth';
+import { setToken } from '@/shared';
 import { useNavigate } from 'react-router-dom';
 
 export const useLogin = () => {

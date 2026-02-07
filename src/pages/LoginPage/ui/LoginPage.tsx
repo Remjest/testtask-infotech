@@ -1,7 +1,7 @@
 import { LoginForm } from "./LoginForm";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-import { isAuthorized, removeToken } from "../model/auth";
+import { isAuthorized } from "@/shared";
 import LoginFormWrapper from "./LoginFormWrapper";
 
 
