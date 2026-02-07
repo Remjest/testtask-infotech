@@ -6,6 +6,7 @@ import { setToken } from '../model/auth';
 import { Input } from 'antd';
 import { Button } from 'antd';
 import { useNavigate } from 'react-router-dom';
+import StyledLoginForm from './StyledLoginForm';
 
 export const LoginForm = () => {
     const [username, setUsername] = useState('');
@@ -27,20 +28,24 @@ export const LoginForm = () => {
     });
 
     const handleSubmit = (e: React.FormEvent) => {
+        if (isLoading) return;
         e.preventDefault();
         setIsLoading(true);
         loginMutation.mutate();
     };
 
     return (
-        <form onSubmit={handleSubmit}>
+        <StyledLoginForm onSubmit={handleSubmit}>
+            <legend>Авторизация</legend>
             <Input
+                name='login'
                 placeholder="Логин"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 disabled={isLoading}
             />
             <Input.Password
+                name='password'
                 type="password"
                 placeholder="Пароль"
                 value={password}
@@ -56,6 +61,6 @@ export const LoginForm = () => {
             >
             Войти
             </Button>
-        </form>
+        </StyledLoginForm>
     );
 };

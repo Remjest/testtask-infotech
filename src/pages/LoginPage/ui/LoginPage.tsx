@@ -1,7 +1,9 @@
 import { LoginForm } from "./LoginForm";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-import { isAuthorized } from "../model/auth";
+import { isAuthorized, removeToken } from "../model/auth";
+import LoginFormWrapper from "./LoginFormWrapper";
+
 
 export const LoginPage = () => { 
     const navigate = useNavigate();
@@ -13,10 +15,9 @@ export const LoginPage = () => {
     }, [navigate]);
     
     return (
-        <>
-            <h1>Авторизация</h1>
+        <LoginFormWrapper>
             <LoginForm />
-        </>
+        </LoginFormWrapper>
     )
 
 }
