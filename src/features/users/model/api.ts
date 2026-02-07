@@ -7,7 +7,7 @@ export const getUsers = (): Promise<User[]> => {
     return axios.get<User[]>(API_URL).then((res) => res.data);
 };
 
-export const createUser = (user: Omit<User, 'id'>): Promise<User> => {
+export const createUser = (user: Omit<User, 'id' | 'createdAt'>): Promise<User> => {
     return axios.post<User>(API_URL, user).then((res) => res.data);
 };
 
