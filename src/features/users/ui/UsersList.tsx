@@ -2,8 +2,13 @@ import { Avatar, List } from "antd"
 import { useUsers } from "../lib/useUsers";
 import dayjs from "dayjs";
 import UsersListWrapper from "./UsersListWrapper";
+import { User } from "@/entities/User";
 
-export const UsersList = () => {
+interface UsersListProps {
+    onEditUser: (user: User) => void;
+}
+
+export const UsersList = ({ onEditUser }: UsersListProps) => {
     let {data: users, isLoading} = useUsers();
 
     return (
@@ -21,8 +26,8 @@ export const UsersList = () => {
                 renderItem={user => (
                     <List.Item>
                         <List.Item.Meta
-                            avatar={<Avatar src={user.avatar} />}
-                            title={<a href="https://ant.design">{user.name}</a>}
+                            avatar={<Avatar style={{cursor: 'pointer'}} onClick={() => onEditUser(user)} src={user.avatar} />}
+                            title={<a onClick={() => onEditUser(user)}>{user.name}</a>}
                             description={`Зарегистрирован ${dayjs(user.createdAt).format('DD.MM.YYYY')}`}
                         />
                     </List.Item>
