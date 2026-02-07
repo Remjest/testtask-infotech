@@ -1,4 +1,4 @@
-import { CreateUser, UsersList } from '@/features/users';
+import { CreateUser, EditUser, UsersList } from '@/features/users';
 import UserPageWrapper from './UserPageWrapper';
 import { Button, Modal } from 'antd';
 import { useLogout } from '@/features/auth';
@@ -33,10 +33,14 @@ export const UsersPage = () => {
                 <Modal
                     title="Редактирование пользователя"
                     open={!!editingUser}
-                    onOk={() => {}}
                     onCancel={() => setEditingUser(null)}
+                    footer={null}
                 >
-                    <div>{editingUser.name}</div>
+                    <EditUser
+                        user={editingUser}
+                        onSuccess={() => setEditingUser(null)}
+                        onCancel={() => setEditingUser(null)}
+                    />
                 </Modal>
             )}
         </UserPageWrapper>

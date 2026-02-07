@@ -15,3 +15,6 @@ export const updateUser = (id: string, user: Partial<User>): Promise<User> => {
     return axios.put<User>(`${API_URL}/${id}`, user).then((res) => res.data);
 };
 
+export const deleteUser = (id: string): Promise<void> => {
+  return axios.delete(`${API_URL}/${id}`).then(() => void 0);
+};
