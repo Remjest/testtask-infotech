@@ -3,11 +3,11 @@ import { removeToken } from '@/shared/lib/auth';
 import { message } from 'antd';
 
 export const useLogout = () => {
-  const navigate = useNavigate();
+    const navigate = useNavigate();
 
-  return () => {
-    removeToken();
-    message.success('Вы вышли из системы');
-    navigate('/login', { replace: true });
-  };
+    return () => {
+        removeToken();
+        message.success('Вы вышли из системы');
+        navigate('/login', { replace: true });
+    };
 };
